@@ -1,0 +1,43 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
+---
+
+<BaseLayout title="文章" description="博客文章列表">
+  <section class="page-header">
+    <p class="eyebrow">Blog</p>
+    <h1>文章</h1>
+    <p>所有 Markdown 文章都会自动出现在这里。</p>
+  </section>
+
+  <section class="post-list" aria-label="文章列表">
+    {
+      posts.map((post) => (
+        <article class="post-card">
+          <div>
+            <p class="post-date">
+              {post.data.publishDate.toLocaleDateString("zh-CN", {
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+              })}
+            </p>
+            <h2>
+              <a href={`/blog/${post.slug}/`}>{post.data.title}</a>
+            </h2>
+            <p>{post.data.description}</p>
+          </div>
+          <div class="tag-row">
+            {post.data.tags.map((tag) => (
+              <span>{tag}</span>
+            ))}
+          </div>
+        </article>
+      ))
+    }
+  </section>
+</BaseLayout>

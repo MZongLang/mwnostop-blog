@@ -1,0 +1,56 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
+const featured = posts[0];
+---
+
+<BaseLayout title="Personal Blog" description="个人博客首页">
+  <section class="hero">
+    <p class="eyebrow">Notes, projects, and ideas</p>
+    <h1>把长期思考写成清晰的个人博客。</h1>
+    <p class="hero-copy">
+      这里是你的个人站点骨架：适合发布文章、整理项目、沉淀学习笔记，并可以直接部署到 GitHub Pages。
+    </p>
+    <div class="hero-actions">
+      <a class="button primary" href="/blog/">查看文章</a>
+      <a class="button" href="/about/">关于我</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-heading">
+      <p class="eyebrow">Latest</p>
+      <h2>最近文章</h2>
+    </div>
+    {
+      featured ? (
+        <article class="post-card">
+          <div>
+            <p class="post-date">
+              {featured.data.publishDate.toLocaleDateString("zh-CN", {
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+              })}
+            </p>
+            <h3>
+              <a href={`/blog/${featured.slug}/`}>{featured.data.title}</a>
+            </h3>
+            <p>{featured.data.description}</p>
+          </div>
+          <div class="tag-row">
+            {featured.data.tags.map((tag) => (
+              <span>{tag}</span>
+            ))}
+          </div>
+        </article>
+      ) : (
+        <p>还没有文章。</p>
+      )
+    }
+  </section>
+</BaseLayout>
