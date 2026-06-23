@@ -4,11 +4,13 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description?: string;
+  bodyClass?: string;
 }
 
 const {
   title,
-  description = "A personal blog about notes, projects, and ideas."
+  description = "A personal blog about notes, projects, and ideas.",
+  bodyClass = ""
 } = Astro.props;
 
 const siteTitle = "Personal Blog";
@@ -24,7 +26,7 @@ const pageTitle = title === siteTitle ? siteTitle : `${title} | ${siteTitle}`;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{pageTitle}</title>
   </head>
-  <body>
+  <body class={bodyClass}>
     <header class="site-header">
       <a class="brand" href="/" aria-label="Personal Blog home">Personal Blog</a>
       <nav aria-label="Primary navigation">
@@ -36,7 +38,7 @@ const pageTitle = title === siteTitle ? siteTitle : `${title} | ${siteTitle}`;
       <slot />
     </main>
     <footer class="site-footer">
-      <span>© {new Date().getFullYear()} Personal Blog</span>
+      <span>&copy; {new Date().getFullYear()} Personal Blog</span>
       <span>Built with Astro</span>
     </footer>
   </body>

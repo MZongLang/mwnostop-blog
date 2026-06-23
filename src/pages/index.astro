@@ -8,49 +8,121 @@ const posts = (await getCollection("blog")).sort(
 const featured = posts[0];
 ---
 
-<BaseLayout title="Personal Blog" description="个人博客首页">
-  <section class="hero">
-    <p class="eyebrow">Notes, projects, and ideas</p>
-    <h1>把长期思考写成清晰的个人博客。</h1>
-    <p class="hero-copy">
-      这里是你的个人站点骨架：适合发布文章、整理项目、沉淀学习笔记，并可以直接部署到 GitHub Pages。
-    </p>
-    <div class="hero-actions">
-      <a class="button primary" href="/blog/">查看文章</a>
-      <a class="button" href="/about/">关于我</a>
-    </div>
-  </section>
+<BaseLayout
+  title="Personal Blog"
+  description="个人博客首页"
+  bodyClass="home-page"
+>
+  <div class="welcome-home" data-welcome-home>
+    <section
+      class="welcome-stage"
+      role="button"
+      tabindex="0"
+      aria-label="进入博客首页"
+      data-welcome-stage
+    >
+      <div class="sky-motion" aria-hidden="true">
+        <span class="cloud-wisp cloud-wisp-a"></span>
+        <span class="cloud-wisp cloud-wisp-b"></span>
+        <span class="cloud-wisp cloud-wisp-c"></span>
+        <span class="bird bird-a">
+          <svg viewBox="0 0 74 32" focusable="false" aria-hidden="true">
+            <path d="M4 20c13-10 24-10 33 0 9-10 20-10 33 0" />
+          </svg>
+        </span>
+        <span class="bird bird-b">
+          <svg viewBox="0 0 74 32" focusable="false" aria-hidden="true">
+            <path d="M4 20c13-10 24-10 33 0 9-10 20-10 33 0" />
+          </svg>
+        </span>
+        <span class="bird bird-c">
+          <svg viewBox="0 0 74 32" focusable="false" aria-hidden="true">
+            <path d="M4 20c13-10 24-10 33 0 9-10 20-10 33 0" />
+          </svg>
+        </span>
+      </div>
+      <div class="welcome-center">
+        <p class="welcome-kicker">Personal Blog</p>
+        <h1 class="welcome-word">welcome</h1>
+      </div>
+    </section>
 
-  <section class="section">
-    <div class="section-heading">
-      <p class="eyebrow">Latest</p>
-      <h2>最近文章</h2>
-    </div>
-    {
-      featured ? (
-        <article class="post-card">
-          <div>
-            <p class="post-date">
-              {featured.data.publishDate.toLocaleDateString("zh-CN", {
-                year: "numeric",
-                month: "long",
-                day: "numeric"
-              })}
-            </p>
-            <h3>
-              <a href={`/blog/${featured.slug}/`}>{featured.data.title}</a>
-            </h3>
-            <p>{featured.data.description}</p>
-          </div>
-          <div class="tag-row">
-            {featured.data.tags.map((tag) => (
-              <span>{tag}</span>
-            ))}
-          </div>
-        </article>
-      ) : (
-        <p>还没有文章。</p>
-      )
-    }
-  </section>
+    <section class="blog-entry" id="blog-entry" aria-label="博客首页内容">
+      <div class="blog-entry-intro">
+        <p class="eyebrow">Notes, Projects, Ideas</p>
+        <h2>把长期思考，写成清晰的个人博客。</h2>
+        <p>
+          这里会收集文章、项目记录和学习笔记。先从一片天空进入，再慢慢走向真正想沉淀下来的内容。
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="/blog/">查看文章</a>
+          <a class="button" href="/about/">关于我</a>
+        </div>
+      </div>
+
+      <div class="latest-panel">
+        <div class="section-heading">
+          <p class="eyebrow">Latest</p>
+          <h2>最近文章</h2>
+        </div>
+        {
+          featured ? (
+            <article class="post-card">
+              <div>
+                <p class="post-date">
+                  {featured.data.publishDate.toLocaleDateString("zh-CN", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                  })}
+                </p>
+                <h3>
+                  <a href={`/blog/${featured.slug}/`}>{featured.data.title}</a>
+                </h3>
+                <p>{featured.data.description}</p>
+              </div>
+              <div class="tag-row">
+                {featured.data.tags.map((tag) => (
+                  <span>{tag}</span>
+                ))}
+              </div>
+            </article>
+          ) : (
+            <article class="post-card">
+              <div>
+                <p class="post-date">Coming soon</p>
+                <h3>第一篇文章正在路上</h3>
+                <p>首页模板已经准备好，之后添加 Markdown 文章就会自动显示在这里。</p>
+              </div>
+            </article>
+          )
+        }
+      </div>
+    </section>
+  </div>
+
+  <script is:inline>
+    const home = document.querySelector("[data-welcome-home]");
+    const stage = document.querySelector("[data-welcome-stage]");
+    const entry = document.querySelector("#blog-entry");
+
+    const enterBlog = () => {
+      if (!home || !entry || home.classList.contains("entered")) return;
+      home.classList.add("entered");
+      stage?.blur();
+      window.setTimeout(() => {
+        entry.scrollIntoView({ behavior: "smooth", block: "start" });
+        entry.setAttribute("tabindex", "-1");
+        entry.focus({ preventScroll: true });
+      }, 360);
+    };
+
+    stage?.addEventListener("click", enterBlog);
+    stage?.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        enterBlog();
+      }
+    });
+  </script>
 </BaseLayout>
