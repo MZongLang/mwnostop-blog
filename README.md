@@ -2,6 +2,10 @@
 
 An Astro static blog ready for GitHub Pages and a custom domain.
 
+## 写作与发布指南
+
+中文操作文档见 [`docs/blog-writing-publishing-guide.md`](docs/blog-writing-publishing-guide.md)。
+
 ## Local Development
 
 ```powershell
